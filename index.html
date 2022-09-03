@@ -2,8 +2,10 @@
 <html>
 
 <head>
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <!-- <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script> -->
+    <script crossorigin src="https://unpkg.com/react@17.0.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17.0.0/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
         type="text/css" />
@@ -21,12 +23,35 @@
     <script type="text/babel">
         class App extends React.Component {
             render() {
+                const activities = [
+                    {
+                        timestamp: new Date().getTime(),
+                        text: "Ate lunch",
+                        user: {
+                            id: 1, name: 'Nate',
+                            avatar: "http://www.croop.cl/UI/twitter/images/doug.jpg"
+                        },
+                        comments: [{ from: 'Ari', text: 'Me too!' }]
+                    },
+                    {
+                        timestamp: new Date().getTime(),
+                        text: "Woke up early for a beautiful run",
+                        user: {
+                            id: 2, name: 'Ari',
+                            avatar: "http://www.croop.cl/UI/twitter/images/doug.jpg"
+                        },
+                        comments: [{ from: 'Nate', text: 'I am so jealous' }]
+                    },
+                ]
+
                 return (
                     <div className="notificationsFrame">
                         <div className="panel">
                             {/* header part */}
-                            <Header />
-                            <Content />
+                            <Header title="Timeline" />
+                            <Header title="Profile" />
+                            <Header title="Chat" />
+                            <Content activities={activities} />
                         </div>
                     </div>
                 )
@@ -44,7 +69,7 @@
                             <div className="circle"></div>
                         </div>
 
-                        <span className="title">Timeline</span>
+                        <span className="title">{this.props.title}</span>
 
                         <input
                             type="text"
@@ -59,19 +84,26 @@
 
         class Content extends React.Component {
             render() {
+
+                const { activities } = this.props;
                 return (
                     <div className="content">
                         <div className="line"></div>
-                        <div className="item">
 
-                            <div className="avatar">
-                                <img alt='doug' src="http://www.croop.cl/UI/twitter/images/doug.jpg" />
-                            </div>
+                        {activities.map((activity) => {
+                            return (
+                                <div className="item">
+                                    <div className="avatar">
+                                        <img alt='doug' src={activity.user.avatar} />
+                                    </div>
 
-                            <span className="time">An hour ago</span>
-                            <p>Ate lunch</p>
-                            <div className="commentCount">2</div>
-                        </div>
+                                    <span className="time">{activity.timestamp}</span>
+                                    <p>{activity.text}</p>
+                                    <div className="commentCount">{activity.comments.length}</div>
+                                </div>
+
+                            );
+                        })}
 
                     </div>
                 )
